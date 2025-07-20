@@ -1,0 +1,3 @@
+deflib "zgl";
+
+zgl_pixel 1, 1; 

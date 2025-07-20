@@ -29,6 +29,7 @@ extern int werr;
 extern int io;
 extern int _str;
 extern int _int;
+int zgl = 0;
 
 extern void error(char * why);
 extern void parse_variable_name(char * ptr);
@@ -46,6 +47,13 @@ void parse_strint(char *ptr);
 void parse_continue();
 void parse_break();
 void parse_rem(char *ptr);
+void parse_zgl_pixel(char *ptr);
+void parse_zgl_render();
+
+extern void parse_defflt(char *ptr);
+extern void parse_flt(char *ptr);
+extern void parse_printf(char *ptr);
+extern void parse_fltadd(char *ptr);
 
 void check(char *arg) {
   int at = -1;
@@ -90,16 +98,164 @@ void parse_2(char *ptr) {
     parse_break();
   } else if (strncmp(ptr, "rem ", 4) == 0) {
     parse_rem(ptr);
+  } else if (strncmp(ptr, "zgl_pixel ", 11) == 0) {
+    parse_zgl_pixel(ptr);
+  } else if (strcmp(ptr, "zgl_render") == 0) {
+    parse_zgl_render();
+  } else if (strncmp(ptr, "defflt ", 7) == 0) {
+    parse_defflt(ptr);
+  } else if (strncmp(ptr, "printf ", 7) == 0) {
+    parse_printf(ptr);
+  } else if (strncmp(ptr, "flt ", 4) == 0) {
+    parse_flt(ptr);
+  } else if (strncmp(ptr, "fltadd ", 7) == 0) {
+    parse_fltadd(ptr);
   } else {
     error("INVALID COMMAND");
   }
+}
+
+void parse_zgl_render() {
+  if (!zgl) {
+    error("INVALID COMMAND");
+  }
+  char content[4097] = "";
+  strcat(content, "SDL_RenderPresent(renderer);");
+}
+
+void parse_zgl_pixel(char *ptr) {
+  if (!zgl) {
+    error("INVALID COMMAND");
+  }
+  ptr += 11;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  int and = -1;
+  int in_str = 0;
+  for (size_t i = 0; i < strlen(ptr); i++) {
+    if (ptr[i] == '\"') {
+      if (!in_str) {
+        in_str = 1;
+      } else {
+        in_str = 0;
+      }
+    }
+    if (ptr[i] == ',' && !in_str) {
+      if (and != -1) {
+        if (!in_str) {
+          error("TOO MUCH ARGUMENTS");
+        }
+      }
+      and = i;
+    }
+  }
+  if (in_str) {
+    error("INVALID STRING");
+  }
+  if (and == -1) {
+    error("INVALID USE OF ZGL_PIXEL");
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF ZGL_PIXEL");
+  }
+  char *str = ptr;
+  str[and] = '\0';
+  while (str[strlen(str) - 1] == ' ') {
+    str[strlen(str) - 1] = '\0';
+  }
+  int is_raw_int = 0;
+  if (str[0] != '\"' || str[strlen(str) - 1] != '\"') {
+    for (size_t i = 0; i < strlen(str); i++) {
+      if (str[i] < '0' || str[i] > '9') {
+        error("INVALID INTEGER");
+      }
+    }
+    is_raw_int = 1;
+  } else {
+    str++;
+    str[strlen(str) - 1] = '\0';
+    int at = -1;
+    for (int i = 0; i < ints; i++) {
+      char *int_name = int_names[i];
+      if (strcmp(str, int_name) == 0) {
+        at = i;
+        break;
+      }
+    }
+    if (at == -1) {
+      error("INVALID INTEGER NAME");
+    }
+  }
+  for (int i = 0; i < and; i++) {
+    ptr++;
+  }
+  ptr++;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while(ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] == '\"' && ptr[strlen(ptr) - 1] == '\"') {
+    ptr++;
+    ptr[strlen(ptr) - 1] = '\0';
+    int at = -1;
+    for (int i = 0; i < ints; i++) {
+      char *int_name = int_names[i];
+      if (strcmp(ptr, int_name) == 0) {
+        at = i;
+        break;
+      }
+    }
+    if (at == -1) {
+    error("INVALID INTEGER NAME");
+    }
+    char content[4097];
+    strcpy(content, "SDL_RenderDrawPoint(renderer,");
+    if (is_raw_int) {
+      strcat(content, str);
+    } else {
+      strcat(content, "___");
+      strcat(content, str);
+    }
+    strcat(content, ",___");
+    strcat(content, ptr);
+    strcat(content, ");");
+    if (rec - 1 != -1 && recs[rec - 1] == 1) {
+      strcat(head, content);
+      return;
+    }
+    strcat(body, content);
+    return;
+  }
+  for (size_t i = 0; i < strlen(ptr); i++) {
+    if (ptr[i] < '0' || ptr[i] > '9') {
+      error("INVALID INTEGER");
+    }
+  }
+  char content[4097];
+  strcpy(content, "SDL_RenderDrawPoint(renderer,");
+  if (is_raw_int) {
+    strcat(content, str);
+  } else {
+    strcat(content, "___");
+    strcat(content, str);
+  }
+  strcat(content, ",___");
+  strcat(content, ");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
 }
 
 void parse_rem(char *ptr) {
   if (!_int) {
     error("INVALID COMMAND");
   }
-  ptr += 5;
+  ptr += 4;
   while (ptr[0] == ' ') {
     ptr++;
   }

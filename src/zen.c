@@ -29,7 +29,7 @@ int io = 0;
 int _str = 0;
 int _int = 0;
 char *version = "006";
-int is_stable = 1;
+int is_stable = 0;
 
 void error(char * why);
 void parse_variable_name(char * ptr);
@@ -39,6 +39,10 @@ extern int recs_3[4096];
 extern int rec_3;
 extern void parse_2(char *ptr);
 extern void check(char *arg);
+extern int zgl;
+extern int flt;
+extern char flt_names[];
+extern int flts;
 
 void parse(char command[]) {
   char *ptr = command;
@@ -88,6 +92,14 @@ void parse(char command[]) {
       strcat(libs, "#include <string.h>\n");
     } else if (strcmp(ptr, "int") == 0) {
       _int = 1;
+    } else if (strcmp(ptr, "zgl") == 0) {
+      zgl = 1;
+      strcat(libs, "#include <SDL/sdl.h>\n");
+      strcat(head, "SDL_Window *window;\nSDL_Renderer *renderer;\n");
+      strcat(body, "window = SDL_CreateWindow(\"ZGL Window\", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 512, 512, 0);");
+      strcat(body, "renderer = SDL_CreateRenderer(window);");
+    } else if (strcmp(ptr, "flt") == 0) {
+      flt = 1;
     } else {
       error("INVALID LIBRARY");
     }
@@ -1428,10 +1440,10 @@ void parse(char command[]) {
       error("INVALID STRING");
     }
     if (and == -1) {
-      error("INVALID USE OF INTDIV");
+      error("INVALID USE OF DIV");
     }
     if (ptr[0] == '\0') {
-      error("INVALID USE OF INTDIV");
+      error("INVALID USE OF DIV");
     }
     char *str = ptr;
     str[and] = '\0';
@@ -2469,7 +2481,12 @@ int main(int argc, char *argv[]) {
     #endif
   }
   char content[4097] = "";
-  strcpy(content, "gcc -O3 -march=native -o ");
+  strcpy(content, "gcc ");
+  if (zgl) {
+    printf("%d\n", system("sdl2-config > /dev/null"));
+    return 0;
+  }
+  strcat(content, " -O3 -fsingle-precision-constant -march=native -o ");
   strcat(content, filename);
   if (!o) {
     strcat(content, " .out-zf.c");
