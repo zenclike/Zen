@@ -1,0 +1,10 @@
+deflib "io";
+deflib "int";
+defint "i";
+int "i", 0;
+
+loop;
+  intadd "i", 1;
+  printd "i";
+  printw "\n";
+end;

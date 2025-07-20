@@ -1,0 +1,9 @@
+func "another";
+  run "another", 1;
+end;
+
+func "main";
+  run "another", 1;
+end;
+
+run "main", 1;

@@ -1,0 +1,14 @@
+deflib "io";
+deflib "str";
+defstr "data";
+defstr "name";
+deftxt "file";
+
+printw "Filename :: ";
+get "name";
+wrt "file", "^name";
+
+printw "Line :: ";
+get "data";
+stradd "data", "\n";
+wrtctf "file", "data";

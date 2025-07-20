@@ -1,0 +1,6 @@
+deflib "io";
+deflib "str";
+defstr "a";
+
+str "a", "firefox https://www.zenclike.github.io";
+sys "^a";

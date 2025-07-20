@@ -1,0 +1,3 @@
+defpac "package";
+
+run "hello", 1;

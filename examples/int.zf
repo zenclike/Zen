@@ -1,0 +1,37 @@
+deflib "io";
+deflib "str";
+deflib "int";
+defint "a";
+defstr "b";
+
+int "a", 256;
+printd "a";
+printw "\n";
+
+add "a", 256;
+printd "a";
+printw "\n";
+
+mul "a", 256;
+printd "a";
+printw "\n";
+
+sub "a", 256;
+printd "a";
+printw "\n";
+
+div "a", 256;
+printd "a";
+printw "\n";
+
+str "b", "abcdefghijklmnopqrstuvwxyz";
+printr "b";
+printw "\n";
+
+strlen "b", "a";
+printd "a";
+printw "\n";
+
+add "a", "a";
+printd "a";
+printw "\n";

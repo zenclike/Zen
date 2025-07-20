@@ -1,0 +1,22 @@
+deflib "io";
+deflib "str";
+defstr "a";
+
+str "a", "abc";
+strup "a";
+printr "a";
+printw "\n";
+
+strlw "a";
+printr "a";
+printw "\n";
+
+stradd "a", "def";
+printr "a";
+printw "\n";
+
+strfch "a";
+strlch "a";
+strfch "a";
+printr "a";
+printw "\n";

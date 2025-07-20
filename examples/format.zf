@@ -1,0 +1,21 @@
+deflib "io";
+deflib "str";
+deflib "int";
+defstr "a";
+defstr "b";
+defint "c";
+defint "d";
+
+str "a", "zen";
+str "b", "^a";
+int "c", 3;
+int "d", "c";
+
+printr "a";
+printw "\n";
+printr "b";
+printw "\n";
+printd "c";
+printw "\n";
+printd "d";
+printw "\n";

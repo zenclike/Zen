@@ -1,0 +1,13 @@
+deflib "io";
+deflib "str";
+deftxt "file";
+defstr "a";
+
+txt "file", "file.zf";
+  printw "Invalid file\n";
+end;
+
+getlnf "file", "a";
+  printr "a";
+  printw "\n";
+end;
