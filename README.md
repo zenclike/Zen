@@ -109,6 +109,8 @@ There is a few types of commands in **Zen**, here is all of them.
  fltmul <str>, <flt> :: function
  fltdiv <str>, <flt> :: function
  cos <str> :: function
+ tan <str> :: function
+ sin <str> :: function
 ```
 What is a **function**?
 A function is like a group of commands turns into a single command.
