@@ -58,6 +58,8 @@ extern void parse_fltsub(char *ptr);
 extern void parse_fltmul(char *ptr);
 extern void parse_fltdiv(char *ptr);
 extern void parse_cos(char *ptr);
+extern void parse_tan(char *ptr);
+extern void parse_sin(char *ptr);
 
 void check(char *arg) {
   int at = -1;
@@ -122,6 +124,10 @@ void parse_2(char *ptr) {
     parse_fltdiv(ptr);
   } else if (strncmp(ptr, "cos ", 4) == 0) {
     parse_cos(ptr);
+  } else if (strncmp(ptr, "tan ", 4) == 0) {
+    parse_tan(ptr);
+  } else if (strncmp(ptr, "sin ", 4) == 0) {
+    parse_sin(ptr);
   } else {
     error("INVALID COMMAND");
   }

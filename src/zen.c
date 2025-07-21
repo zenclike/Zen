@@ -28,7 +28,7 @@ int o = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "007";
+char *version = "008";
 int is_stable = 1;
 
 void error(char * why);

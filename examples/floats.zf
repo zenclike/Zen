@@ -28,4 +28,20 @@ printw ") = ";
 cos "a";
 
 printf "a";
+printw "\ntan(";
+
+printf "a";
+printw ") = ";
+
+tan "a";
+
+printf "a";
+printw "\nsin(";
+
+printf "a";
+printw ") = ";
+
+sin "a";
+
+printf "a";
 printw "\n";

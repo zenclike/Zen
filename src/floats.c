@@ -14,6 +14,88 @@ extern void error(char *why);
 extern void parse_variable_name(char *ptr);
 extern int io;
 
+void parse_sin(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 4;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while (ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF SIN");
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FLOAT NAME");
+  }
+  char content[4097] = "_____";
+  strcat(content, ptr);
+  strcat(content, "=sin(_____");
+  strcat(content, ptr);
+  strcat(content, ");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
+void parse_tan(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 4;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while (ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF TAN");
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FLOAT NAME");
+  }
+  char content[4097] = "_____";
+  strcat(content, ptr);
+  strcat(content, "=tan(_____");
+  strcat(content, ptr);
+  strcat(content, ");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
 void parse_cos(char *ptr) {
   if (!flt) {
     error("INVALID COMMAND");

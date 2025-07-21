@@ -55,6 +55,8 @@ Here is all what commands stand for.
  fltmul :: multiplies a float literal or float variable to an float variable
  fltdiv :: divides a float literal or float variable to an float variable
  cos :: gets the float variable and changes to radians and set the value to a float variable
+ tan :: gets the float variable and changes to tangent of float variable's value and set the value to a float variable
+ sin :: gets the float variable and changes to the value of the sine of float variable's value and set the value to a float variable
 ```
 There is a few types of commands in **Zen**, here is all of them.
 ```
