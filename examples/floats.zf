@@ -1,0 +1,31 @@
+deflib "io";
+deflib "flt";
+defflt "a";
+
+flt "a", 2.5;
+
+printf "a";
+printw " = 2.5\n";
+
+printf "a";
+printw " x 3.14 = ";
+
+fltmul "a", 3.14;
+
+printf "a";
+printw "\n";
+printf "a";
+
+fltdiv "a", 0;
+
+printw " / 0 = ";
+printf "a";
+printw "\ncos(";
+
+printf "a";
+printw ") = ";
+
+cos "a";
+
+printf "a";
+printw "\n";

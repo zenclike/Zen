@@ -54,6 +54,10 @@ extern void parse_defflt(char *ptr);
 extern void parse_flt(char *ptr);
 extern void parse_printf(char *ptr);
 extern void parse_fltadd(char *ptr);
+extern void parse_fltsub(char *ptr);
+extern void parse_fltmul(char *ptr);
+extern void parse_fltdiv(char *ptr);
+extern void parse_cos(char *ptr);
 
 void check(char *arg) {
   int at = -1;
@@ -110,6 +114,14 @@ void parse_2(char *ptr) {
     parse_flt(ptr);
   } else if (strncmp(ptr, "fltadd ", 7) == 0) {
     parse_fltadd(ptr);
+  } else if (strncmp(ptr, "fltsub ", 7) == 0) {
+    parse_fltsub(ptr);
+  } else if (strncmp(ptr, "fltmul ", 7) == 0) {
+    parse_fltmul(ptr);
+  } else if (strncmp(ptr, "fltdiv ", 7) == 0) {
+    parse_fltdiv(ptr);
+  } else if (strncmp(ptr, "cos ", 4) == 0) {
+    parse_cos(ptr);
   } else {
     error("INVALID COMMAND");
   }

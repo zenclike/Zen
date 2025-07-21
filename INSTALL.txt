@@ -2,6 +2,6 @@ To install the Zen compiler, you need to have gcc compiler.
 Then you need to run ./build.sh in the terminal.
 Now, you have the Zen compiler (zenc) in the bin folder!
 If you want to make the Zen compiler global, run
-./global.sh
+source global.sh in the terminal.
 But if you want to remove the Zen compiler
 from your operating system, run ./remove.sh in the terminal.

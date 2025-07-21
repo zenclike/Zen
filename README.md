@@ -6,7 +6,7 @@ Here is an another example, `txt`.
 `txt` stands for **read text file** which is not the same as the original form.
 Here is all what commands stand for.
 ```
-* no library
+* core
  deflib :: defines a library
  defpac :: defines a package
  func :: creates a function
@@ -17,7 +17,8 @@ Here is all what commands stand for.
 * library io
  printw :: prints a string literal
  printr :: prints a string variable
- printd :: prints a integer variable
+ printd :: prints an integer variable
+ printf :: prints a float variable
  deftxt :: defines a file variable name
  txt :: reads the text file and checks if file does not exists
  getlnf :: reads a line from the file and set the content to a string variable
@@ -40,12 +41,20 @@ Here is all what commands stand for.
  intneq :: check if an integer variable is not the same as the another integer variable
  intlw :: check if an integer variable is lower than the another integer variable
  intmr :: check if an integer variable is higher than the another integer variable
- add :: adds an integer literal or integer variable to the integer variable
+ add :: adds an integer literal or integer variable to an integer variable
  sub :: subtracts an integer literal or integer variable to an integer variable
- mul :: multiples an integer literal or integer variable to an integer variable
+ mul :: multiplies an integer literal or integer variable to an integer variable
  div :: divides an integer literal or integer variable to an integer variable
  rand :: randoms a number between 1 to your number that you choose and set the value to an integer variable
  strint :: changes from a string to an integer and set the value to an integer variable
+ rem :: gets the remainings from the division and set the value to an integer variable
+*library flt
+ defflt :: defines a float variable
+ fltadd :: adds a float literal or float variable to an float variable
+ fltsub :: subtracts a float literal or float variable to an float variable
+ fltmul :: multiplies a float literal or float variable to an float variable
+ fltdiv :: divides a float literal or float variable to an float variable
+ cos :: gets the float variable and changes to radians and set the value to a float variable
 ```
 There is a few types of commands in **Zen**, here is all of them.
 ```
@@ -89,6 +98,15 @@ There is a few types of commands in **Zen**, here is all of them.
  div <str>, <int> :: function
  rand <str>, <int> :: function
  strint <str>, <str> :: function
+ rem <str>, <str> :: function
+* library flt
+ defflt <str> :: function
+ flt <str> :: function
+ fltadd <str>, <flt> :: function
+ fltsub <str>, <flt> :: function
+ fltmul <str>, <flt> :: function
+ fltdiv <str>, <flt> :: function
+ cos <str> :: function
 ```
 What is a **function**?
 A function is like a group of commands turns into a single command.
@@ -117,4 +135,4 @@ int "a", 1;
 int "b", 1;
 add "b", "a";
 ```
-***Copyright (C) Zenic 2025***
+***Copyrighted (C) The Zen Team 2025***

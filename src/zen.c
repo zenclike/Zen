@@ -28,8 +28,8 @@ int o = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "006";
-int is_stable = 0;
+char *version = "007";
+int is_stable = 1;
 
 void error(char * why);
 void parse_variable_name(char * ptr);
@@ -100,6 +100,7 @@ void parse(char command[]) {
       strcat(body, "renderer = SDL_CreateRenderer(window);");
     } else if (strcmp(ptr, "flt") == 0) {
       flt = 1;
+      strcat(libs, "#include <math.h>\n");
     } else {
       error("INVALID LIBRARY");
     }
@@ -1491,12 +1492,24 @@ void parse(char command[]) {
       if (at == -1) {
         error("INVALID INTEGER NAME");
       }
+      char buf[4097];
+      for (size_t i = 0; i < strlen(buf); i++) {
+        buf[i] = ptr[i];
+      }
+      buf[strlen(buf)] = '\0';
+      size_t val = strtoul(buf, NULL, 0);
       char content[4097] = "";
-      strcat(content, "___");
-      strcat(content, str);
-      strcat(content, "/=___");
-      strcat(content, ptr);
-      strcat(content, ";");
+      if (val == 0) {
+        strcat(content, "___");
+        strcat(content, str);
+        strcat(content, "=0;");
+      } else {
+        strcat(content, "___");
+        strcat(content, str);
+        strcat(content, "/=___");
+        strcat(content, ptr);
+        strcat(content, ";");
+      }
       if (rec - 1 != -1 && recs[rec - 1] == 1) {
         strcat(head, content);
         return;
@@ -2371,7 +2384,7 @@ int main(int argc, char *argv[]) {
   }
   printf("[\e[38;5;110m\e[1mZEN COMPILER VERSION \e[38;5;139m%s %s\e[0m]\n", version, stable);
   #ifndef linux
-    printf("[\e[38;5;37m\e[1m?\e[0m] DO YOU ALREADY HAVE GCC [Y/n]");
+    printf("[\e[38;5;37m\e[1m?\e[0m] DO YOU ALREADY HAVE GCC [Y/n] ");
     char answer[4097];
     fgets(answer, sizeof(answer), stdin);
     answer[strlen(answer) - 1] = '\0';
@@ -2394,10 +2407,18 @@ int main(int argc, char *argv[]) {
       } else if (strcmp(arg, "werr") == 0) {
         werr = 1;
       } else if (strcmp(arg, "-help") == 0) {
-        system("zen-readme");
+        #ifndef __unix__
+          printf("OPEN README.md IN THE ZEN DIRECTORY\n");
+        #else
+          system("zen-readme");
+        #endif
         return 0;
       } else if (strcmp(arg, "h") == 0) {
-        system("zen-readme");
+        #ifndef __unix__
+          printf("OPEN README.md IN THE ZEN DIRECTORY\n");
+        #else
+          system("zen-readme");
+        #endif
         return 0;
       } else if (strcmp(arg, "o") == 0) {
         o = 1;
@@ -2483,8 +2504,7 @@ int main(int argc, char *argv[]) {
   char content[4097] = "";
   strcpy(content, "gcc ");
   if (zgl) {
-    printf("%d\n", system("sdl2-config > /dev/null"));
-    return 0;
+    error("COMPILATION WAS STOPPED DUE TO THE LIBRARY IS NOT YET FINISHED");
   }
   strcat(content, " -O3 -fsingle-precision-constant -march=native -o ");
   strcat(content, filename);
