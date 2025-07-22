@@ -559,6 +559,103 @@ void parse(char command[]) {
       return;
     }
     strcat(body, content);
+  } else if (strncmp(ptr, "strsw ", 6) == 0) {
+    if (!_str) {
+      error("INVALID COMMAND");
+    }
+    ptr += 6;
+    while (ptr[0] == ' ') {
+      ptr++;
+    }
+    int and = -1;
+    int in_str = 0;
+    for (size_t i = 0; i < strlen(ptr); i++) {
+      if (ptr[i] == '\"') {
+        if (!in_str) {
+          in_str = 1;
+        } else {
+          in_str = 0;
+        }
+      }
+      if (ptr[i] == ',' && !in_str) {
+        if (and != -1) {
+          if (!in_str) {
+            error("TOO MUCH ARGUMENTS");
+          }
+        }
+        and = i;
+      }
+    }
+    if (in_str) {
+      error("INVALID STRING");
+    }
+    if (and == -1) {
+      error("INVALID USE OF STRSW");
+    }
+    if (ptr[0] == '\0') {
+      error("INVALID USE OF STRSW");
+    }
+    char *str = ptr;
+    str[and] = '\0';
+    while (str[strlen(str) - 1] == ' ') {
+      str[strlen(str) - 1] = '\0';
+    }
+    if (str[0] != '\"' || str[strlen(str) - 1] != '\"') {
+      error("INVALID STRING");
+    }
+    str++;
+    str[strlen(str) - 1] = '\0';
+    int at = -1;
+    for (int i = 0; i < strs; i++) {
+      char *str_name = str_names[i];
+      if (strcmp(str, str_name) == 0) {
+        at = i;
+        break;
+      }
+    }
+    if (at == -1) {
+      error("INVALID FIRST STRING NAME");
+    }
+    for (int i = 0; i < and; i++) {
+      ptr++;
+    }
+    ptr++;
+    while (ptr[0] == ' ') {
+      ptr++;
+    }
+    while(ptr[strlen(ptr) - 1] == ' ') {
+      ptr[strlen(ptr) - 1] = '\0';
+    }
+    if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+      error("INVALID STRING");
+    }
+    ptr++;
+    ptr[strlen(ptr) - 1] = '\0';
+    at = -1;
+    for (int i = 0; i < strs; i++) {
+      char *str_name = str_names[i];
+      if (strcmp(ptr, str_name) == 0) {
+        at = i;
+        break;
+      }
+    } 
+    if (at == -1) {
+      error("INVALID SECOND STRING NAME");
+    }
+    char content[4097];
+    strcpy(content, "if(strncmp(__");
+    strcat(content, str);
+    strcat(content, ",__");
+    strcat(content, ptr);
+    strcat(content, ",sizeof(__");
+    strcat(content, ptr);
+    strcat(content, "))==0){");
+    eqs++;
+    if (rec - 1 != -1 && recs[rec - 1] == 1) {
+      strcat(head, content);
+      return;
+    }
+    strcat(body, content);
   } else if (strncmp(ptr, "strneq ", 7) == 0) {
     if (!_str) {
       error("INVALID COMMAND");

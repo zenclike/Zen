@@ -424,6 +424,12 @@ void parse_continue() {
       return;
     }
     strcat(body, "continue;");
+  } else if (rec_3 - 1 != -1 && recs_3[rec_3 - 1] == 1) {
+    if (rec - 1 != -1 && recs[rec - 1] == 1) {
+      strcat(head, "continue;");
+      return;
+    }
+    strcat(body, "continue;");
   } else {
     error("INVALID USE OF CONTINUE");
   }
@@ -694,7 +700,7 @@ void parse_close(char *ptr) {
   if (!io) {
     error("INVALID COMMAND");
   }
-  ptr += 7;
+  ptr += 6;
   while (ptr[0] == ' ') {
     ptr++;
   }
@@ -714,7 +720,11 @@ void parse_close(char *ptr) {
   char content[4097] = "fclose(____";
   strcat(content, ptr);
   strcat(content, ");\n");
-  strcat(head, content);
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
 }
 
 void parse_wrtctf(char *ptr) {

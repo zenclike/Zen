@@ -28,8 +28,12 @@ Here is all what commands stand for.
  clear :: clear the screen
 * library str
  defstr :: defines a string variable
- str :: sets a string content to a string variable
+ str :: sets a string content to the string variable
+ stradd :: adds a string content to the string variable
+ strup :: changes from lowercase to uppercase
+ strlw :: changes from uppercase to lowercase
  streq :: checks if a string variable is the same as the another string variable
+ strsw :: checks if a string variable starts with another string variable
  strneq :: checks if a string variable is not the same as the another string variable
  strfch :: removes the first character of the string variable
  strlch :: removes the last character of the string variable
@@ -90,7 +94,11 @@ There is a few types of commands in **Zen**, here is all of them.
 * library str
  defstr <str> :: function
  str <str>, <str> :: function
+ stradd <str>, <str> :: function
+ strup <str>, <str> :: function
+ strlw <str>, <str> :: function
  streq <str>, <str> :: statement
+ strsw <str>, <str> :: statement
  strneq <str>, <str> :: statement
  strfch <str>, <str> :: function
  strlch <str> :: function
