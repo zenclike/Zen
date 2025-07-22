@@ -60,7 +60,7 @@ Here is all what commands stand for.
 ```
 There is a few types of commands in **Zen**, here is all of them.
 ```
-* no library
+* core
  deflib <str> :: function
  defpac <str> :: function
  func <str> :: function
