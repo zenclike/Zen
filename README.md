@@ -51,12 +51,16 @@ Here is all what commands stand for.
 *library flt
  defflt :: defines a float variable
  fltadd :: adds a float literal or float variable to an float variable
- fltsub :: subtracts a float literal or float variable to an float variable
- fltmul :: multiplies a float literal or float variable to an float variable
- fltdiv :: divides a float literal or float variable to an float variable
- cos :: gets the float variable and changes to radians and set the value to a float variable
- tan :: gets the float variable and changes to tangent of float variable's value and set the value to a float variable
- sin :: gets the float variable and changes to the value of the sine of float variable's value and set the value to a float variable
+ fltsub :: subtracts a float literal or float variable to the float variable
+ fltmul :: multiplies a float literal or float variable to the float variable
+ fltdiv :: divides a float literal or float variable to the float variable
+ cos :: gets the float variable and changes to radians and set the value to the float variable
+ tan :: gets the float variable and changes to tangent of float variable's value and set the value to the float variable
+ sin :: gets the float variable and changes to the value of the sine of float variable's value and set the value to the float variable
+ abs :: gets the absolute value of that float variable's value and set the value to the float variable
+ sqrt :: gets the square root value of that float variable's value and set the value to the float variable
+ ceil :: rounds the value of that float variable's value up to the nearest number and set the value to the float variable
+ floor :: rounds the value of that float variable's value down to the nearest number and set the value to the float variable
 ```
 There is a few types of commands in **Zen**, here is all of them.
 ```
@@ -111,6 +115,10 @@ There is a few types of commands in **Zen**, here is all of them.
  cos <str> :: function
  tan <str> :: function
  sin <str> :: function
+ abs <str> :: function
+ sqrt <str> :: function
+ ceil <str> :: function
+ floor <str> :: function
 ```
 What is a **function**?
 A function is like a group of commands turns into a single command.

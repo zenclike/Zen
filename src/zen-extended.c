@@ -60,6 +60,10 @@ extern void parse_fltdiv(char *ptr);
 extern void parse_cos(char *ptr);
 extern void parse_tan(char *ptr);
 extern void parse_sin(char *ptr);
+extern void parse_abs(char *ptr);
+extern void parse_sqrt(char *ptr);
+extern void parse_ceil(char *ptr);
+extern void parse_floor(char *ptr);
 
 void check(char *arg) {
   int at = -1;
@@ -128,6 +132,14 @@ void parse_2(char *ptr) {
     parse_tan(ptr);
   } else if (strncmp(ptr, "sin ", 4) == 0) {
     parse_sin(ptr);
+  } else if (strncmp(ptr, "abs ", 4) == 0) {
+    parse_abs(ptr);
+  } else if (strncmp(ptr, "sqrt ", 5) == 0) {
+    parse_sqrt(ptr);
+  } else if (strncmp(ptr, "ceil ", 5) == 0) {
+    parse_ceil(ptr);
+  } else if (strncmp(ptr, "floor ", 6) == 0) {
+    parse_floor(ptr);
   } else {
     error("INVALID COMMAND");
   }

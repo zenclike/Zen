@@ -14,6 +14,170 @@ extern void error(char *why);
 extern void parse_variable_name(char *ptr);
 extern int io;
 
+void parse_floor(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 4;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while (ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF FLOOR");
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FLOAT NAME");
+  }
+  char content[4097] = "_____";
+  strcat(content, ptr);
+  strcat(content, "=floor(_____");
+  strcat(content, ptr);
+  strcat(content, ");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
+void parse_ceil(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 4;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while (ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF CEIL");
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FLOAT NAME");
+  }
+  char content[4097] = "_____";
+  strcat(content, ptr);
+  strcat(content, "=ceil(_____");
+  strcat(content, ptr);
+  strcat(content, ");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
+void parse_sqrt(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 4;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while (ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF SQRT");
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FLOAT NAME");
+  }
+  char content[4097] = "_____";
+  strcat(content, ptr);
+  strcat(content, "=sqrt(_____");
+  strcat(content, ptr);
+  strcat(content, ");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
+void parse_abs(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 4;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while (ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF ABS");
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FLOAT NAME");
+  }
+  char content[4097] = "_____";
+  strcat(content, ptr);
+  strcat(content, "=abs(_____");
+  strcat(content, ptr);
+  strcat(content, ");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
 void parse_sin(char *ptr) {
   if (!flt) {
     error("INVALID COMMAND");
@@ -249,7 +413,7 @@ void parse_fltdiv(char *ptr) {
     buf[i] = ptr[i];
   }
   buf[strlen(buf)] = '\0';
-  float val = strtof(buf, NULL);
+  double val = strtof(buf, NULL);
   char content[4097] = "";
   if (val == 0) {
     strcat(content, "_____");
@@ -815,7 +979,7 @@ void parse_defflt(char *ptr) {
   ptr[strlen(ptr) - 1] = '\0';
   parse_variable_name(ptr);
   char content[4097] = "";
-  strcat(content, "float _____");
+  strcat(content, "double _____");
   strcat(content, ptr);
   strcat(content, ";");
   strcat(body, content);
