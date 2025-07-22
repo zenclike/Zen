@@ -13,6 +13,395 @@ extern int rec;
 extern void error(char *why);
 extern void parse_variable_name(char *ptr);
 extern int io;
+extern int eqs;
+
+void parse_fltmr(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 6;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  int and = -1;
+  int in_str = 0;
+  for (size_t i = 0; i < strlen(ptr); i++) {
+    if (ptr[i] == '\"') {
+      if (!in_str) {
+        in_str = 1;
+      } else {
+        in_str = 0;
+      }
+    }
+    if (ptr[i] == ',' && !in_str) {
+      if (and != -1) {
+        if (!in_str) {
+          error("TOO MUCH ARGUMENTS");
+        }
+      }
+      and = i;
+    }
+  }
+  if (in_str) {
+    error("INVALID STRING");
+  }
+  if (and == -1) {
+    error("INVALID USE OF FLTMR");
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF FLTMR");
+  }
+  char *str = ptr;
+  str[and] = '\0';
+  while (str[strlen(str) - 1] == ' ') {
+    str[strlen(str) - 1] = '\0';
+  }
+  if (str[0] != '\"' || str[strlen(str) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  str++;
+  str[strlen(str) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(str, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FIRST FLOAT NAME");
+  }
+  for (int i = 0; i < and; i++) {
+    ptr++;
+  }
+  ptr++;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while(ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  } 
+  if (at == -1) {
+    error("INVALID SECOND FLOAT NAME");
+  }
+  char content[4097];
+  strcpy(content, "if(_____");
+  strcat(content, str);
+  strcat(content, ">_____");
+  strcat(content, ptr);
+  strcat(content, "){");
+  eqs++;
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
+void parse_fltlw(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 6;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  int and = -1;
+  int in_str = 0;
+  for (size_t i = 0; i < strlen(ptr); i++) {
+    if (ptr[i] == '\"') {
+      if (!in_str) {
+        in_str = 1;
+      } else {
+        in_str = 0;
+      }
+    }
+    if (ptr[i] == ',' && !in_str) {
+      if (and != -1) {
+        if (!in_str) {
+          error("TOO MUCH ARGUMENTS");
+        }
+      }
+      and = i;
+    }
+  }
+  if (in_str) {
+    error("INVALID STRING");
+  }
+  if (and == -1) {
+    error("INVALID USE OF FLTLW");
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF FLTLW");
+  }
+  char *str = ptr;
+  str[and] = '\0';
+  while (str[strlen(str) - 1] == ' ') {
+    str[strlen(str) - 1] = '\0';
+  }
+  if (str[0] != '\"' || str[strlen(str) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  str++;
+  str[strlen(str) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(str, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FIRST FLOAT NAME");
+  }
+  for (int i = 0; i < and; i++) {
+    ptr++;
+  }
+  ptr++;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while(ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  } 
+  if (at == -1) {
+    error("INVALID SECOND FLOAT NAME");
+  }
+  char content[4097];
+  strcpy(content, "if(_____");
+  strcat(content, str);
+  strcat(content, "<_____");
+  strcat(content, ptr);
+  strcat(content, "){");
+  eqs++;
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
+void parse_fltneq(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 6;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  int and = -1;
+  int in_str = 0;
+  for (size_t i = 0; i < strlen(ptr); i++) {
+    if (ptr[i] == '\"') {
+      if (!in_str) {
+        in_str = 1;
+      } else {
+        in_str = 0;
+      }
+    }
+    if (ptr[i] == ',' && !in_str) {
+      if (and != -1) {
+        if (!in_str) {
+          error("TOO MUCH ARGUMENTS");
+        }
+      }
+      and = i;
+    }
+  }
+  if (in_str) {
+    error("INVALID STRING");
+  }
+  if (and == -1) {
+    error("INVALID USE OF FLTNEQ");
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF FLTNEQ");
+  }
+  char *str = ptr;
+  str[and] = '\0';
+  while (str[strlen(str) - 1] == ' ') {
+    str[strlen(str) - 1] = '\0';
+  }
+  if (str[0] != '\"' || str[strlen(str) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  str++;
+  str[strlen(str) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(str, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FIRST FLOAT NAME");
+  }
+  for (int i = 0; i < and; i++) {
+    ptr++;
+  }
+  ptr++;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while(ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  } 
+  if (at == -1) {
+    error("INVALID SECOND FLOAT NAME");
+  }
+  char content[4097];
+  strcpy(content, "if(_____");
+  strcat(content, str);
+  strcat(content, "!=_____");
+  strcat(content, ptr);
+  strcat(content, "){");
+  eqs++;
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
+
+void parse_flteq(char *ptr) {
+  if (!flt) {
+    error("INVALID COMMAND");
+  }
+  ptr += 6;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  int and = -1;
+  int in_str = 0;
+  for (size_t i = 0; i < strlen(ptr); i++) {
+    if (ptr[i] == '\"') {
+      if (!in_str) {
+        in_str = 1;
+      } else {
+        in_str = 0;
+      }
+    }
+    if (ptr[i] == ',' && !in_str) {
+      if (and != -1) {
+        if (!in_str) {
+          error("TOO MUCH ARGUMENTS");
+        }
+      }
+      and = i;
+    }
+  }
+  if (in_str) {
+    error("INVALID STRING");
+  }
+  if (and == -1) {
+    error("INVALID USE OF FLTEQ");
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF FLTEQ");
+  }
+  char *str = ptr;
+  str[and] = '\0';
+  while (str[strlen(str) - 1] == ' ') {
+    str[strlen(str) - 1] = '\0';
+  }
+  if (str[0] != '\"' || str[strlen(str) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  str++;
+  str[strlen(str) - 1] = '\0';
+  int at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(str, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  }
+  if (at == -1) {
+    error("INVALID FIRST FLOAT NAME");
+  }
+  for (int i = 0; i < and; i++) {
+    ptr++;
+  }
+  ptr++;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  while(ptr[strlen(ptr) - 1] == ' ') {
+    ptr[strlen(ptr) - 1] = '\0';
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  at = -1;
+  for (int i = 0; i < flts; i++) {
+    char *flt_name = flt_names[i];
+    if (strcmp(ptr, flt_name) == 0) {
+      at = i;
+      break;
+    }
+  } 
+  if (at == -1) {
+    error("INVALID SECOND FLOAT NAME");
+  }
+  char content[4097];
+  strcpy(content, "if(_____");
+  strcat(content, str);
+  strcat(content, "==_____");
+  strcat(content, ptr);
+  strcat(content, "){");
+  eqs++;
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
+}
 
 void parse_floor(char *ptr) {
   if (!flt) {

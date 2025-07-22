@@ -64,6 +64,10 @@ extern void parse_abs(char *ptr);
 extern void parse_sqrt(char *ptr);
 extern void parse_ceil(char *ptr);
 extern void parse_floor(char *ptr);
+extern void parse_flteq(char *ptr);
+extern void parse_fltneq(char *ptr);
+extern void parse_fltlw(char *ptr);
+extern void parse_fltmr(char *ptr);
 
 void check(char *arg) {
   int at = -1;
@@ -140,6 +144,14 @@ void parse_2(char *ptr) {
     parse_ceil(ptr);
   } else if (strncmp(ptr, "floor ", 6) == 0) {
     parse_floor(ptr);
+  } else if (strncmp(ptr, "flteq ", 6) == 0) {
+    parse_flteq(ptr);
+  } else if (strncmp(ptr, "fltneq ", 6) == 0) {
+    parse_fltneq(ptr);
+  } else if (strncmp(ptr, "fltlw ", 6) == 0) {
+    parse_fltlw(ptr);
+  } else if (strncmp(ptr, "fltmr ", 6) == 0) {
+    parse_fltmr(ptr);
   } else {
     error("INVALID COMMAND");
   }

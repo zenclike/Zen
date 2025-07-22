@@ -61,6 +61,10 @@ Here is all what commands stand for.
  sqrt :: gets the square root value of that float variable's value and set the value to the float variable
  ceil :: rounds the value of that float variable's value up to the nearest number and set the value to the float variable
  floor :: rounds the value of that float variable's value down to the nearest number and set the value to the float variable
+ flteq :: check if a float variable is the same as the another float variable
+ fltneq :: check if a float variable is not the same as the another float variable
+ fltlw :: check if a float variable is lower than another float variable
+ fltmr :: check if a float variable is higher than the another float variable
 ```
 There is a few types of commands in **Zen**, here is all of them.
 ```
@@ -119,6 +123,10 @@ There is a few types of commands in **Zen**, here is all of them.
  sqrt <str> :: function
  ceil <str> :: function
  floor <str> :: function
+ flteq <str> :: function
+ fltneq <str> :: function
+ fltlw <str> :: function
+ fltmr <str> :: function
 ```
 What is a **function**?
 A function is like a group of commands turns into a single command.
