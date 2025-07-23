@@ -1027,11 +1027,19 @@ void parse_getlnf(char *ptr) {
   strcat(content, ptr);
   strcat(content, "),____");
   strcat(content, str);
-  strcat(content, ")!=NULL){__");
+  strcat(content, ")!=NULL){if(__");
   strcat(content, ptr);
   strcat(content, "[strlen(__");
   strcat(content, ptr);
-  strcat(content, ")-1]=\'\\0\';");
+  strcat(content, ")-1]!=\'\\n\'){__");
+  strcat(content, ptr);
+  strcat(content, "[strlen(__");
+  strcat(content, ptr);
+  strcat(content, ")]=\'\\0\');}else{__");
+  strcat(content, ptr);
+  strcat(content, "[strlen(__");
+  strcat(content, ptr);
+  strcat(content, ")-1]=\'\\n\';}");
   recs_3[rec_3] = 1;
   rec_3++;
   if (rec - 1 != -1 && recs[rec - 1] == 1) {

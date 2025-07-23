@@ -28,7 +28,7 @@ int o = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "013";
+char *version = "014";
 int is_stable = 1;
 
 void error(char * why);
@@ -2603,7 +2603,7 @@ int main(int argc, char *argv[]) {
   if (zgl) {
     error("COMPILATION WAS STOPPED DUE TO THE LIBRARY IS NOT YET FINISHED");
   }
-  strcat(content, "-w -O3 -fsingle-precision-constant -march=native -o ");
+  strcat(content, "-w -s -O3 -fsingle-precision-constant -march=native -o ");
   strcat(content, filename);
   if (!o) {
     strcat(content, " .out-zf.c");
