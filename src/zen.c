@@ -28,7 +28,7 @@ int o = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "010";
+char *version = "013";
 int is_stable = 1;
 
 void error(char * why);
@@ -802,9 +802,9 @@ void parse(char command[]) {
         error("INVALID INTEGER");
       }
     }
-    char content[4097] = "usleep(";
+    char content[4097] = "for(unsigned long int h=0;h<";
     strcat(content, ptr);
-    strcat(content, ");");
+    strcat(content, ";h++){for(unsigned long int i=0;i<50000000;i++);}");
     if (rec - 1 != -1 && recs[rec - 1] == 1) {
       strcat(head, content);
       return;
@@ -2573,7 +2573,7 @@ int main(int argc, char *argv[]) {
   }
   fclose(file);
   if (funcs > 0) { 
-    strcat(libs, "int itr=0;\n");
+    strcat(libs, "unsigned long int itr=0;\n");
   }
   if (_str) {
     strcat(libs, "char char_temp[2]=\"\";\n");
@@ -2603,7 +2603,7 @@ int main(int argc, char *argv[]) {
   if (zgl) {
     error("COMPILATION WAS STOPPED DUE TO THE LIBRARY IS NOT YET FINISHED");
   }
-  strcat(content, " -O3 -fsingle-precision-constant -march=native -o ");
+  strcat(content, "-w -O3 -fsingle-precision-constant -march=native -o ");
   strcat(content, filename);
   if (!o) {
     strcat(content, " .out-zf.c");

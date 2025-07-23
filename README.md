@@ -12,7 +12,8 @@ Here is all what commands stand for.
  func :: creates a function
  end :: ends a statement, loop or function
  run :: runs a function with an iteration
- continue :: skips commands ahead and runs loop again
+ sleep :: wait in miliseconds
+ continue :: skips commands ahead and runs the loop again
  break :: kills the loop
 * library io
  printw :: prints a string literal
@@ -78,6 +79,7 @@ There is a few types of commands in **Zen**, here is all of them.
  func <str> :: function
  end :: function
  run <str>, <int> :: function
+ sleep <int> :: function
  continue :: function
  break :: function
 * library io
