@@ -165,4 +165,13 @@ int "a", 1;
 int "b", 1;
 add "b", "a";
 ```
+Lastly, here's all CFLAGS in Zen.
+```
+-h :: opens the readme file (unix)
+--help :: opens the readme file (unix)
+-o :: creates a object file (*.o)
+--object :: creates a object file (*.o)
+-ar :: auto run the program after compile
+--autorun :: auto run the program after compile
+```
 ***Copyrighted (C) The Zen Team 2025***

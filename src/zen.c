@@ -22,24 +22,22 @@ int recs_4[4096];
 int rec = 0;
 int rec_2 = 0;
 int rec_4 = 0;
-int wall = 0;
-int werr = 0;
+int ar = 0;
 int o = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "014";
+char *version = "015";
 int is_stable = 1;
 
 void error(char * why);
 void parse_variable_name(char * ptr);
 void parse_function_name(char * ptr);
 
-extern int recs_3[4096];
+extern int recs_3[];
 extern int rec_3;
 extern void parse_2(char *ptr);
 extern void check(char *arg);
-extern int zgl;
 extern int flt;
 extern char flt_names[];
 extern int flts;
@@ -92,12 +90,6 @@ void parse(char command[]) {
       strcat(libs, "#include <string.h>\n");
     } else if (strcmp(ptr, "int") == 0) {
       _int = 1;
-    } else if (strcmp(ptr, "zgl") == 0) {
-      zgl = 1;
-      strcat(libs, "#include <SDL/sdl.h>\n");
-      strcat(head, "SDL_Window *window;\nSDL_Renderer *renderer;\n");
-      strcat(body, "window = SDL_CreateWindow(\"ZGL Window\", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 512, 512, 0);");
-      strcat(body, "renderer = SDL_CreateRenderer(window);");
     } else if (strcmp(ptr, "flt") == 0) {
       flt = 1;
       strcat(libs, "#include <math.h>\n");
@@ -857,7 +849,7 @@ void parse(char command[]) {
     if (!io) {
       error("INVALID COMMAND");
     }
-    char content[] = "printf(\"\\e[2J\e[H\");";
+    char content[] = "printf(\"\\e[2J\\e[H\");";
     if (rec - 1 != -1 && recs[rec - 1] == 1) {
       strcat(head, content);
       return;
@@ -1379,7 +1371,7 @@ void parse(char command[]) {
         error("INVALID INTEGER");
       }
     }
-    char content[4097];
+    char content[4097] = "";
     if (strcmp(ptr, "1") == 0) {
       strcat(content, "--___");
       strcat(content, str);
@@ -1496,7 +1488,7 @@ void parse(char command[]) {
         error("INVALID INTEGER");
       }
     }
-    char content[4097];
+    char content[4097] = "";
     strcat(content, "___");
     strcat(content, str);
     strcat(content, "*=");
@@ -1619,7 +1611,7 @@ void parse(char command[]) {
         error("INVALID INTEGER");
       }
     }
-    char content[4097];
+    char content[4097] = "";
     strcat(content, "___");
     strcat(content, str);
     strcat(content, "/=");
@@ -2468,7 +2460,7 @@ void error(char * why) {
   if (new_file != NULL) {
     fclose(new_file);
   }
-  exit(-1);
+  exit(EXIT_FAILURE);
 }
 
 int main(int argc, char *argv[]) {
@@ -2499,28 +2491,28 @@ int main(int argc, char *argv[]) {
     if (argv[i][0] == '-') {
       char *arg = argv[i];
       arg++;
-      if (strcmp(arg, "wall") == 0) {
-        wall = 1;
-      } else if (strcmp(arg, "werr") == 0) {
-        werr = 1;
-      } else if (strcmp(arg, "-help") == 0) {
+      if (strcmp(arg, "-help") == 0) {
         #ifndef __unix__
           printf("OPEN README.md IN THE ZEN DIRECTORY\n");
         #else
           system("zen-readme");
         #endif
-        return 0;
+        return EXIT_SUCCESS;
       } else if (strcmp(arg, "h") == 0) {
         #ifndef __unix__
           printf("OPEN README.md IN THE ZEN DIRECTORY\n");
         #else
           system("zen-readme");
         #endif
-        return 0;
+        return EXIT_SUCCESS;
       } else if (strcmp(arg, "o") == 0) {
         o = 1;
-      } else if (strcmp(arg, "-obj") == 0) {
+      } else if (strcmp(arg, "-object") == 0) {
         o = 1;
+      } else if (strcmp(arg, "ar") == 0) {
+        ar = 1;
+      } else if (strcmp(arg, "-autorun") == 0) {
+        ar = 1;
       } else {
         error("INVALID CFLAG");
       }
@@ -2582,7 +2574,7 @@ int main(int argc, char *argv[]) {
   file = fopen(".out-zf.c", "w");
   fprintf(file, "%s", libs);
   fprintf(file, "%s", head);
-  fprintf(file, "int main(int argc,char *argv[]){");
+  fprintf(file, "int main(int argc,char*argv[]{");
   fprintf(file, "%s", body);
   fprintf(file, "}");
   fclose(file);
@@ -2600,9 +2592,6 @@ int main(int argc, char *argv[]) {
   }
   char content[4097] = "";
   strcpy(content, "gcc ");
-  if (zgl) {
-    error("COMPILATION WAS STOPPED DUE TO THE LIBRARY IS NOT YET FINISHED");
-  }
   strcat(content, "-w -s -O3 -fsingle-precision-constant -march=native -o ");
   strcat(content, filename);
   if (!o) {
@@ -2616,5 +2605,14 @@ int main(int argc, char *argv[]) {
     system("rm ./-o");
   }
   printf("[\e[38;5;225m\e[1mCOMPILATION SUCCESSFUL\e[0m]\n");
-  return 0;
+  if (ar) {
+    printf("\e[2J\e[H");
+    strcpy(content, "./");
+    strcat(content, filename);
+    #ifndef unix
+      strcat(content, ".out");
+    #endif
+    system(content);
+  }
+  return EXIT_SUCCESS;
 }

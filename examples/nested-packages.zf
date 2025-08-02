@@ -1,0 +1,2 @@
+defpac "package-2";
+printw "Hello, World!\n";
