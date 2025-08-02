@@ -4,6 +4,7 @@ Most of the commands are shortened like this command, `printw`.
 `printw` stands for **print** and **raw** which prints a string literal **NOT** a string variable.
 Here is an another example, `txt`.
 `txt` stands for **read text file** which is not the same as the original form.
+To compile a Zen program, type `zenc <source.zf> <program> <cflags>`.
 Here is all what commands stand for.
 ```
 * core
