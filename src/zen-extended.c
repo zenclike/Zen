@@ -887,7 +887,7 @@ void parse_getlnf(char *ptr) {
   strcat(content, ptr);
   strcat(content, "),____");
   strcat(content, str);
-  strcat(content, ")!=NULL){if(__");
+  strcat(content, ")){if(__");
   strcat(content, ptr);
   strcat(content, "[strlen(__");
   strcat(content, ptr);
@@ -895,7 +895,7 @@ void parse_getlnf(char *ptr) {
   strcat(content, ptr);
   strcat(content, "[strlen(__");
   strcat(content, ptr);
-  strcat(content, ")]=\'\\0\');}else{__");
+  strcat(content, ")]=\'\\0\';}else{__");
   strcat(content, ptr);
   strcat(content, "[strlen(__");
   strcat(content, ptr);

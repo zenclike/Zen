@@ -27,7 +27,7 @@ int o = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "015";
+char *version = "016";
 int is_stable = 1;
 
 void error(char * why);
@@ -2556,7 +2556,7 @@ int main(int argc, char *argv[]) {
     error("USE OF FUNC WITHOUT END TO CLOSE THE FUNCTION");
   } else if (rec_2 != 0) {
     error("USE OF LOOP WITHOUT END TO CLOSE THE LOOP");
-  } else if (rec_3 != 0) {
+  } else if (rec_3 > 1) {
     error("USE OF GETLNF WITHOUT END TO CLOSE THE ITERATION");
   } else if (rec_4 != 0) {
     error("USE OF TXT WITHOUT END TO CLOSE THE CHECKER");
@@ -2574,7 +2574,7 @@ int main(int argc, char *argv[]) {
   file = fopen(".out-zf.c", "w");
   fprintf(file, "%s", libs);
   fprintf(file, "%s", head);
-  fprintf(file, "int main(int argc,char*argv[]{");
+  fprintf(file, "int main(int argc,char**argv){");
   fprintf(file, "%s", body);
   fprintf(file, "}");
   fclose(file);
@@ -2592,7 +2592,7 @@ int main(int argc, char *argv[]) {
   }
   char content[4097] = "";
   strcpy(content, "gcc ");
-  strcat(content, "-w -s -O3 -fsingle-precision-constant -march=native -o ");
+  strcat(content, "-w -s -Ofast -ftree-loop-linear -fsingle-precision-constant -march=native -o ");
   strcat(content, filename);
   if (!o) {
     strcat(content, " .out-zf.c");
