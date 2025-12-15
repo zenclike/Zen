@@ -178,5 +178,7 @@ Lastly, here's all CFLAGS in Zen.
 --object :: creates a object file (*.o)
 -ar :: auto run the program after compile
 --autorun :: auto run the program after compile
+-d :: saves the assembly file (*.s)
+--debug :: saves the assembly file (*.s)
 ```
 ***Copyrighted (C) The Zen Team 2025***
