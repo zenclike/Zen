@@ -3,6 +3,7 @@
 CC="gcc"
 STANDARD_FLAGS="-std=c99 -Wall -Wextra"
 PORTABILITY_FLAGS="-static-libgcc"
+LINKING_FLAGS="-I include -L lib"
 OPTIMIZATION_FLAGS="-Ofast -ftree-loop-linear -march=native"
 CFLAGS="$STANDARD_FLAGS $PORTABILITY_FLAGS $OPTIMIZATION_FLAGS"
 SOURCES="src/zen.c src/zen-extended.c src/floats.c"

@@ -170,7 +170,17 @@ int "a", 1;
 int "b", 1;
 add "b", "a";
 ```
-Lastly, here's all CFLAGS in Zen.
+## Shared Library
+If you want to use your Zen shared library with your C program, you should learn this first!
+Basically, Zen will write an underscore to an variable or function, the code block below will explained this situation.
+```
+deffunc a; >> void _a();
+defstr b; >> char ___c[2049] = "";
+defint c; >> unsigned long int __b = 0;
+defflt e; >> double _____e = 0;
+```
+## Flags
+A flag is an option for the compiler, if you want to do something more than just a standalone program.
 ```
 -h :: opens the readme file (unix)
 --help :: opens the readme file (unix)
@@ -180,5 +190,7 @@ Lastly, here's all CFLAGS in Zen.
 --autorun :: auto run the program after compile
 -d :: saves the assembly file (*.s)
 --debug :: saves the assembly file (*.s)
+-s :: creates a shared library (*.a)
+--shared :: creates a shared library (*.a)
 ```
 ***Copyrighted (C) The Zen Team 2025***

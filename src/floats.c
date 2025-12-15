@@ -1370,7 +1370,7 @@ void parse_defflt(char *ptr) {
   char content[4097] = "";
   strcat(content, "double _____");
   strcat(content, ptr);
-  strcat(content, ";");
+  strcat(content, "=0;");
   strcat(body, content);
   strcpy(flt_names[flts], ptr);
   flts++;

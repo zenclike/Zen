@@ -27,10 +27,11 @@ int rec_4 = 0;
 int ar = 0;
 int o = 0;
 int d = 0;
+int s = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "017";
+char *version = "018";
 int is_stable = 1;
 
 void error(char * why);
@@ -120,7 +121,7 @@ void parse(char command[]) {
     ptr[strlen(ptr) - 1] = '\0';
     parse_variable_name(ptr);
     strcpy(str_names[strs], ptr);
-    char content[4097] = "void";
+    char content[4097] = "void _";
     strcat(content, ptr);
     strcat(content, "();\n");
     strcat(head, content);
@@ -2534,7 +2535,7 @@ int main(int argc, char *argv[]) {
           error("THE OPERATING SYSTEM DOES NOT SUPPORT BASH COMMANDS");
         #endif
         return EXIT_SUCCESS;
-      } else if (strcmp(arg, "o") == 0) {
+      }  else if (strcmp(arg, "o") == 0) {
         o = 1;
       } else if (strcmp(arg, "-object") == 0) {
         o = 1;
@@ -2546,18 +2547,22 @@ int main(int argc, char *argv[]) {
         d = 1;
       } else if (strcmp(arg, "-debug") == 0) {
         d = 1;
+      } else if (strcmp(arg, "s") == 0) {
+        s = 1;
+      } else if (strcmp(arg, "-shared") == 0) {
+        s = 1;
       } else {
         error("INVALID CFLAG");
       }
+      continue;
     }
-    if (input == -1) { 
+    if (input == -1 && output == -1) { 
       input = i;
-      continue;
-    } else {
+    } else if (input != -1 && output == -1) {
       output = i;
-      continue;
+    } else {
+      error("TOO MUCH FILES");
     }
-    error("TOO MUCH FILES");
   }
   file = fopen(argv[input], "r");
   if (file == NULL) {
@@ -2617,9 +2622,11 @@ int main(int argc, char *argv[]) {
   file = fopen(".out-zf.c", "w");
   fprintf(file, "%s", libs);
   fprintf(file, "%s", head);
-  fprintf(file, "int main(int argc,char**argv){");
-  fprintf(file, "%s", body);
-  fprintf(file, "}");
+  if (!s) {
+    fprintf(file, "int main(int argc,char**argv){");
+    fprintf(file, "%s", body);
+    fprintf(file, "}");
+  }
   fclose(file);
   char filename[sizeof(argv[output]) + 4097] = "";
   if (output == -1) {
@@ -2635,13 +2642,22 @@ int main(int argc, char *argv[]) {
   }
   char content[4097] = "";
   strcpy(content, "gcc ");
-  strcat(content, "-w -s -Ofast -ftree-loop-linear -fsingle-precision-constant -march=native -o ");
-  strcat(content, filename);
-  if (!o) {
-    strcat(content, " .out-zf.c");
+  if (!s) {
+    strcat(content, "-w -s -Ofast -static-libgcc -ftree-loop-linear -fsingle-precision-constant -march=native -o ");
+    strcat(content, filename);
+    if (!o) {
+      strcat(content, " .out-zf.c");
+    } else {
+      strcat(content, " -c .out-zf.c");
+    }
   } else {
-    strcat(content, " -c .out-zf.c");
-  }
+    if (o) {
+      error("CANNOT USE FLAG OBJECT IF THE FLAG SHARED IS ACTIVE");
+    }
+    strcat(content, "-w -s -shared -static-libgcc -o ");
+    strcat(content, argv[output]);
+    strcat(content, ".a .out-zf.c");
+  } 
   if (d) {
     strcat(content, "-S");
   }
