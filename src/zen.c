@@ -8,11 +8,13 @@ char libs[4097 * 4097];
 char head[4097 * 4097];
 char body[4097 * 4097];
 char line[4097];
+char defined_func_names[4096][4097];
 char func_names[4096][4097];
 char str_names[4096][4097];
 char int_names[4096][4097];
 int eqs = 0;
 int funcs = 0;
+int defined_funcs = 0;
 int strs = 0;
 int ints = 0;
 int strfchs = 0;
@@ -24,10 +26,11 @@ int rec_2 = 0;
 int rec_4 = 0;
 int ar = 0;
 int o = 0;
+int d = 0;
 int io = 0;
 int _str = 0;
 int _int = 0;
-char *version = "016";
+char *version = "017";
 int is_stable = 1;
 
 void error(char * why);
@@ -96,6 +99,33 @@ void parse(char command[]) {
     } else {
       error("INVALID LIBRARY");
     }
+  } else if (strncmp(ptr, "deffunc ", 8) == 0) {
+    if (rec - 1 != -1 && recs[rec - 1] == 1) {
+      error("CANNOT USE DEFFUNC INSIDE A FUNCTION");
+    }
+    ptr += 8;
+    while (ptr[0] == ' ') {
+      ptr++;
+    }
+    while (ptr[strlen(ptr) - 1] == ' ') {
+      ptr[strlen(ptr) - 1] = '\0';
+    }
+    if (ptr[0] == '\0') {
+      error("INVALID USE OF DEFFUNC");
+    }
+    if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+      error("INVALID STRING");
+    }
+    ptr++;
+    ptr[strlen(ptr) - 1] = '\0';
+    parse_variable_name(ptr);
+    strcpy(str_names[strs], ptr);
+    char content[4097] = "void";
+    strcat(content, ptr);
+    strcat(content, "();\n");
+    strcat(head, content);
+    strcpy(defined_func_names[defined_funcs], ptr);
+    defined_funcs++;
   } else if (strncmp(ptr, "defstr ", 7) == 0) {
     if (rec - 1 != -1 && recs[rec - 1] == 1) {
       error("CANNOT USE DEFSTR INSIDE A FUNCTION");
@@ -249,7 +279,15 @@ void parse(char command[]) {
       }
     }
     if (at == -1) {
-      error("INVALID FUNCTION NAME");
+      for (int i = 0; i < defined_funcs; i++) {
+        char *func_name = defined_func_names[i];
+        if (strcmp(str, func_name) == 0) {
+          at = i;
+        }
+      }
+      if (at == -1) {
+        error("INVALID FUNCTION NAME");
+      }
     }
     for (int i = 0; i < and; i++) {
       ptr++;
@@ -2460,6 +2498,7 @@ void error(char * why) {
   if (new_file != NULL) {
     fclose(new_file);
   }
+  printf("[\e[38;5;225m\e[1mCOMPILATION TERMINATED\e[0m]\n");
   exit(EXIT_FAILURE);
 }
 
@@ -2471,17 +2510,7 @@ int main(int argc, char *argv[]) {
   } else {
     strcpy(stable, "\e[38;5;131mNON-STABLE");
   }
-  printf("[\e[38;5;110m\e[1mZEN COMPILER VERSION \e[38;5;139m%s %s\e[0m]\n", version, stable);
-  #ifndef linux
-    printf("[\e[38;5;37m\e[1m?\e[0m] DO YOU ALREADY HAVE GCC [Y/n] ");
-    char answer[4097];
-    fgets(answer, sizeof(answer), stdin);
-    answer[strlen(answer) - 1] = '\0';
-    if (strcmp(answer, "") == 0 || strcmp(answer, "y") == 0 || strcmp(answer, "Y") == 0) {
-    } else if (strcmp(answer, "n") == 0 || strcmp(answer, "N") == 0) {
-      error("PLEASE INSTALL GCC");
-    }
-  #endif
+  printf("[\e[38;5;110m\e[1mZEN COMPILER VERSION \e[38;5;139m%s %s\e[0m]\n", version, stable); 
   if (argc < 2) {
     error("NO ARGUMENT(S) OR INPUT FILE TO COMPILE, TRY -h FOR ALL COMMANDS, COMPILATION'S FLAGS AND LIBRARIES");
   }
@@ -2492,17 +2521,17 @@ int main(int argc, char *argv[]) {
       char *arg = argv[i];
       arg++;
       if (strcmp(arg, "-help") == 0) {
-        #ifndef __unix__
-          printf("OPEN README.md IN THE ZEN DIRECTORY\n");
-        #else
+        #ifndef unix
           system("zen-readme");
+        #else
+          error("THE OPERATING SYSTEM DOES NOT SUPPORT BASH COMMANDS");
         #endif
         return EXIT_SUCCESS;
       } else if (strcmp(arg, "h") == 0) {
-        #ifndef __unix__
-          printf("OPEN README.md IN THE ZEN DIRECTORY\n");
-        #else
+        #ifndef unix
           system("zen-readme");
+        #else
+          error("THE OPERATING SYSTEM DOES NOT SUPPORT BASH COMMANDS");
         #endif
         return EXIT_SUCCESS;
       } else if (strcmp(arg, "o") == 0) {
@@ -2513,6 +2542,10 @@ int main(int argc, char *argv[]) {
         ar = 1;
       } else if (strcmp(arg, "-autorun") == 0) {
         ar = 1;
+      } else if (strcmp(arg, "d") == 0) {
+        d = 1;
+      } else if (strcmp(arg, "-debug") == 0) {
+        d = 1;
       } else {
         error("INVALID CFLAG");
       }
@@ -2551,6 +2584,16 @@ int main(int argc, char *argv[]) {
     }
     printf("[\e[1m\e[38;5;146mPARSING\e[0m] %s\n", line);
     parse(line);
+  }
+  int defined_funcs_left = defined_funcs;
+  for (int i = 0; i < funcs; i++) {
+    if (strcmp(defined_func_names[i], func_names[i]) != 0) {
+      continue;
+    }
+    defined_funcs_left--;
+  }
+  if (defined_funcs_left > 0) {
+    error("SOME DEFINED FUNCTIONS IS STILL NOT INITIALIZED");
   }
   if (rec != 0) {
     error("USE OF FUNC WITHOUT END TO CLOSE THE FUNCTION");
@@ -2599,12 +2642,19 @@ int main(int argc, char *argv[]) {
   } else {
     strcat(content, " -c .out-zf.c");
   }
-  system(content);
+  if (d) {
+    strcat(content, "-S");
+  }
+  int code = system(content);
   system("rm .out-zf.c");
   if (o) {
     system("rm ./-o");
   }
-  printf("[\e[38;5;225m\e[1mCOMPILATION SUCCESSFUL\e[0m]\n");
+  if (code == 0) {
+    printf("[\e[38;5;225m\e[1mCOMPILATION SUCCESSFUL\e[0m]\n");
+  } else {
+    printf("[\e[38;5;225m\e[1mCOMPILATION TERMINATED\e[0m]\n");
+  }
   if (ar) {
     printf("\e[2J\e[H");
     strcpy(content, "./");

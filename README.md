@@ -10,9 +10,11 @@ Here is all what commands stand for.
 * core
  deflib :: defines a library
  defpac :: defines a package
+ deffunc :: defines a func
  func :: creates a function
  end :: ends a statement, loop or function
  run :: runs a function with an iteration
+ asm :: runs an assembly code
  sleep :: wait in miliseconds
  continue :: skips commands ahead and runs the loop again
  break :: kills the loop
@@ -77,9 +79,11 @@ There is a few types of commands in **Zen**, here is all of them.
 * core
  deflib <str> :: function
  defpac <str> :: function
+ deffunc <str> :: function
  func <str> :: function
  end :: function
  run <str>, <int> :: function
+ asm <str> :: function
  sleep <int> :: function
  continue :: function
  break :: function

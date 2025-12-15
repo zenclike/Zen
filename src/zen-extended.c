@@ -46,6 +46,7 @@ void parse_strint(char *ptr);
 void parse_continue();
 void parse_break();
 void parse_rem(char *ptr);
+void parse_asm(char *ptr);
 
 extern void parse_defflt(char *ptr);
 extern void parse_flt(char *ptr);
@@ -145,9 +146,37 @@ void parse_2(char *ptr) {
     parse_fltlw(ptr);
   } else if (strncmp(ptr, "fltmr ", 6) == 0) {
     parse_fltmr(ptr);
+  } else if (strncmp(ptr, "asm", 3) == 0) {
+    parse_asm(ptr);
   } else {
     error("INVALID COMMAND");
   }
+}
+
+void parse_asm(char *ptr) {
+  ptr += 4;
+  while (ptr[0] == ' ') {
+    ptr++;
+  }
+  if (ptr[0] == '\0') {
+    error("INVALID USE OF ASM");
+  }
+  if (ptr[0] != '\"' || ptr[strlen(ptr) - 1] != '\"') {
+    error("INVALID STRING");
+  }
+  ptr++;
+  ptr[strlen(ptr) - 1] = '\0';
+  if (ptr[0] == '^') {
+    error("ASM DOES NOT SUPPORT VARIABLE STRING");
+  }
+  char content[4097] = "asm volatile(\"";
+  strcat(content, ptr);
+  strcat(content, "\");");
+  if (rec - 1 != -1 && recs[rec - 1] == 1) {
+    strcat(head, content);
+    return;
+  }
+  strcat(body, content);
 }
 
 void parse_rem(char *ptr) {

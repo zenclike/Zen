@@ -1,0 +1,7 @@
+deflib "io";
+deffunc "a";
+run "a", 1;
+
+func "a";
+  printw "Hello, World!\n";
+end;
